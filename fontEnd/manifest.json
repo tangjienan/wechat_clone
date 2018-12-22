@@ -1,7 +1,7 @@
 {
 	"@platforms": ["android", "iPhone", "iPad"],
-	"id": "H55E1614D",/*应用的标识，创建应用时自动生成，勿手动修改*/
-	"name": "imooc-muxin",/*应用名称，程序桌面图标名称*/
+	"id" : "",/*应用的标识，创建应用时自动生成，勿手动修改*/
+	"name" : "fontEnd",/*应用名称，程序桌面图标名称*/
 	"version": {
 		"name": "1.0.0",/*应用版本名称*/
 		"code": "83"
@@ -10,7 +10,7 @@
 	"icons": {
 		"72": "icon.png"
 	},
-	"launch_path": "login.html",/*应用的入口页面，默认为根目录下的index.html；支持网络地址，必须以http://或https://开头*/
+	"launch_path": "index.html",/*应用的入口页面，默认为根目录下的index.html；支持网络地址，必须以http://或https://开头*/
 	"developer": {
 		"name": "",/*开发者名称*/
 		"email": "",/*开发者邮箱地址*/
@@ -124,94 +124,6 @@
 					"xxhdpi": ""
 				}
 			}
-		}
-	},
-	"dependencies": {
-		"pages": {
-			"index.html": {
-				"resources": [
-					"imooc-chatlist.html"
-				],
-				"refer": [
-					"imooc-me.html",
-					"imooc-discover.html",
-					"imooc-contact.html"
-				],
-				"priority": 0
-			},
-			"login.html": {
-				"resources": [],
-				"refer": [
-					"index.html"
-				],
-				"priority": 0
-			},
-			"imooc-me.html": {
-				"resources": [],
-				"refer": [
-					"myface.html",
-					"mynickname.html",
-					"myQRCode.html",
-					"login.html"
-				],
-				"priority": 0
-			},
-			"myface.html": {
-				"resources": [],
-				"refer": [
-					"plugin/v3.1.6/myface-uploader.html"
-				],
-				"priority": 0
-			},
-			"imooc-discover.html": {
-				"resources": [],
-				"refer": [
-					"searchFriends.html",
-					"scanme.html"
-				],
-				"priority": 0
-			},
-			"searchFriends.html": {
-				"resources": [],
-				"refer": [
-					"searchFriendsResult.html"
-				],
-				"priority": 0
-			},
-			"imooc-contact.html": {
-				"resources": [],
-				"refer": [
-					"chatting.html"
-				],
-				"priority": 0
-			},
-			"imooc-chatlist.html": {
-				"resources": [],
-				"refer": [
-					"chatting.html"
-				],
-				"priority": 0
-			}
-		},
-		"idle": {
-			"resources": [
-				"fontico/demo.css",
-				"fontico/demo_unicode.html",
-				"fontico/iconfont.ttf",
-				"fontico/iconfont.eot",
-				"fonts/mui.ttf",
-				"fontico/iconfont.css",
-				"css/mui.css",
-				"css/header.css",
-				"fontico/demo_fontclass.html",
-				"js/mui.min.js",
-				"fontico/iconfont.js",
-				"fontico/iconfont.woff",
-				"css/mui.min.css",
-				"js/mui.js",
-				"fontico/iconfont.svg",
-				"fontico/demo_symbol.html"
-			]
 		}
 	}
 }
