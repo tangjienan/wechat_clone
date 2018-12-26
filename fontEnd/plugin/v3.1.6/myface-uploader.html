@@ -34,7 +34,7 @@
 			<a id="cutter" class="mui-pull-right" style="font-size: 15px;color: white;line-height: 40px;">
 				<img src="../../image/upload.png" width="20px"/>
 			</a>
-			<h1 class="mui-title title-color"><b id="chatting-nickname">个人头像</b></h1>
+			<h1 class="mui-title title-color"><b id="chatting-nickname">personal avatar</b></h1>
 		</header>
 
 		<!-- Content -->
@@ -59,12 +59,10 @@
 				
 				var user = app.getUserGlobalInfo();
 				var faceImage = user.faceImageBig;
-				// 获取屏幕宽度，设置图片
+				// get screen width 
 				$image.attr('src', app.imgServerUrl + faceImage);
 				
-				/** ======================== 从相册选择图片 ======================== **/
-					// 从相册中选择图片
-					console.log("从相册中选择图片:");
+					console.log("pick from albumn");
 				    plus.gallery.pick( function(path){
 				    	
 				    	$image.attr('src', path);
@@ -74,47 +72,41 @@
 				    	mui.openWindow("index.html", "index.html");
 				    }, {filter:"image"} );
 				
-				/** ======================== 图片裁剪 ======================== **/
 				
 				$("#cutter").on('tap', function() {
 					
-					plus.nativeUI.showWaiting( "上传中..." );
+					plus.nativeUI.showWaiting( "uploading..." );
 					
 					var cropper = $image.data('cropper');
 					var result = $image.cropper("getCroppedCanvas");
 					if(result) {
 						var base64Url = result.toDataURL();
-						
-						// 上传头像
 						var user = app.getUserGlobalInfo();
-						// 与后端联调
 						mui.ajax(app.serverUrl + "/u/uploadFaceBase64",{
 							data:{
 								userId:user.id,
 								faceData:base64Url
 							},
-							dataType:'json',//服务器返回json格式数据
-							type:'post',//HTTP请求类型
-							timeout:10000,//超时时间设置为10秒；
+							dataType:'json',
+							type:'post',
+							timeout:10000,
 							headers:{'Content-Type':'application/json'},	              
 							success:function(data){
 								
-								// 关闭等待框
 								plus.nativeUI.closeWaiting();
 								
 								if (data.status == 200) {
 									var userInfo = data.data;
 									app.setUserGlobalInfo(userInfo);
 									
-									// 触发另外一个webview的自定义事件，可以使用 mui.fire()
+									
 									var imooc_meWebview = plus.webview.getWebviewById("imooc-me.html");
 									mui.fire(imooc_meWebview, "refresh");
 									
-									// 触发另外一个webview的自定义事件，可以使用 mui.fire()
+									
 									var myfaceWebview = plus.webview.getWebviewById("myface.html");
 									mui.fire(myfaceWebview, "refresh");
 									
-									// 页面跳转
 									mui.openWindow("index.html", "index.html");
 								} else {
 									app.showToast(data.msg, "error");
@@ -127,7 +119,7 @@
 			
 			function faceCutter() {
 				
-				plus.nativeUI.showWaiting( "请稍等..." );
+				plus.nativeUI.showWaiting( "pls wait..." );
 				
 //				var $image = $('#image');
 				var options = {

@@ -11,7 +11,7 @@
     <script type="text/javascript" charset="utf-8">
       	mui.init();
 				
-				mui.plusReady(function(){
+		mui.plusReady(function(){
       		plus.navigator.setStatusBarStyle("light");
       		plus.navigator.setStatusBarBackground("#C9394A");
       	});
@@ -70,10 +70,15 @@
 		];
 		
 			mui.plusReady(function(){
+				
+				initData()
 			
 				mui.back = function() {
 					return false;
 				}
+				
+				
+				
 				//snetChangeSwitch();
 				var indexWebview = plus.webview.currentWebview()
 				
@@ -106,6 +111,26 @@
 		});
 		
 		
+		function netChangeSwitch(){
+			document.addEventListener("netchange", function(){
+				var connectionStatus = plus.networkinfo.getCurrentType();
+				if (connectionStatus != 0 && connectionStatus != 1) {
+					var muxin_title = document.getElementById("muxin_title");
+					muxin_title.innerHTML = "<b>weChat</b>";
+				} else {
+					var muxin_title = document.getElementById("muxin_title");
+					muxin_title.innerHTML = "<b>weChat(no network)</b>";
+				}
+			});
+		}
+		
+		function initData() {
+			var imooc_chatlist = plus.webview.getWebviewById("imooc-chatlist.html");
+			mui.fire(imooc_chatlist, "refresh");
+			
+			var imooc_me = plus.webview.getWebviewById("imooc-me.html");
+			mui.fire(imooc_me, "refresh");
+		}
 		
 		
 	</script>

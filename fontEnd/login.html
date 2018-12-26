@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title></title>
+		<script src="js/mui.min.js"></script>
+
+		<link rel="stylesheet" type="text/css" href="css/registLogin/util.css">
+		<link rel="stylesheet" type="text/css" href="css/registLogin/main.css">
+
+		<script type="text/javascript" charset="utf-8">
+			mui.init();
+		</script>
+
+		<style>
+			.p-t-85 {
+				padding-top: 10px;
+			}
+			
+			.p-b-70 {
+				padding-bottom: 35px;
+			}
+			
+			.m-t-85 {
+				margin-top: 15px;
+			}
+			
+			.container-login100 {
+				padding: 25px;
+			}
+			/*toast信息提示*/
+			
+			.mui-toast-container {
+				bottom: 50% !important;
+			}
+			.mui-toast-message {
+				opacity: 0.6;
+				color: #fff;
+				width: 180px;
+				padding: 70px 5px 10px 5px;
+			}
+		</style>
+	</head>
+
+	<body>
+
+		<div class="mui-content">
+			<div class="container-login100">
+				<div class="wrap-login100 p-t-85 p-b-20">
+					<form id="userform">
+						<span class="login100-form-title p-b-70">
+							<h5>meChat</h5>
+						</span>
+						<span class="login100-form-avatar">
+							<img id="img_login_face" src="css/registLogin/arrow.jpg" alt="风间影月">
+						</span>
+
+						<div class="wrap-input100 validate-input m-t-85 m-b-35">
+							<input class="input100" type="text" id="username" name="username" placeholder="userName">
+							<span class="focus-input100"></span>
+						</div>
+
+						<div class="wrap-input100 validate-input m-b-50">
+							<input class="input100" type="password" id="txt_password" name="password" placeholder="password">
+							<span class="focus-input100"></span>
+						</div>
+						<div class="container-login100-form-btn">
+							<button type="submit" id="registOrLogin" class="login100-form-btn">
+								login/regist
+							</button>
+						</div>
+					</form>
+					
+				</div>
+			</div>
+		</div>
+		<script type="text/javascript" src="js/app.js" ></script>
+		<script type="text/javascript">
+			
+			mui.plusReady(function() {
+				// if User already login in before, just read from cache
+				var userInfo = app.getUserGlobalInfo();
+				if (userInfo != null) {
+					mui.openWindow("index.html", "index.html");
+				}
+				
+				var userform = document.getElementById("userform");
+				var username = document.getElementById("username");
+				var txt_password = document.getElementById("txt_password");
+				
+				console.log(username.value)
+				userform.addEventListener("submit", function(e){
+					
+					if (!app.isNotNull(username.value)) {
+						console.log("hey")
+						username.focus();
+					} else if (!app.isNotNull(txt_password.value)) {						
+						txt_password.focus();
+					} else {
+						if (username.value.length > 12) {
+							console.log("hey hey hey")
+							app.showToast("username too long", "error");
+							return false;
+						} else if (txt_password.value.length > 12) {
+							app.showToast("password too long", "error");
+							return false;
+						}
+						
+						// get unique client id
+						var cid = plus.push.getClientInfo().clientid;
+						console.log(app.serverUrl)
+						console.log(username.value)
+						console.log(txt_password.value)
+						// send request
+						mui.ajax(app.serverUrl + "/u/registOrLogin",{
+							data:{
+								username:username.value,
+								password:txt_password.value,
+								cid: cid
+							},
+							dataType:'json',
+							type:'post',
+							timeout:10000,
+							headers:{'Content-Type':'application/json'},	              
+							success:function(data){
+								console.log(JSON.stringify(data));
+								username.blur();
+								txt_password.blur();
+								if (data.status == 200) {
+									var userInfoJson = data.data;
+									app.setUserGlobalInfo(userInfoJson);	
+									var imooc_me = plus.webview.getWebviewById("imooc-me.html");
+									mui.fire(imooc_me, "refresh");
+									mui.openWindow("index.html", "index.html");
+								} else {
+									app.showToast(data.msg, "error");
+								}
+							}
+						});
+						
+					}	
+					e.preventDefault();
+				});
+			})
+			
+		</script>
+
+	</body>
+
+</html>

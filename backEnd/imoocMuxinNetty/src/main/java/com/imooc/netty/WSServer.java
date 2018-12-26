@@ -39,6 +39,6 @@ public class WSServer {
 
     public void start() {
         this.future = server.bind(8088);
-        System.err.println("netty websocket server 启动完毕...");
+        System.err.println("netty websocket server finish starting...s");
     }
 }

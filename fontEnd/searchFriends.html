@@ -1,0 +1,77 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="css/mui.min.css" rel="stylesheet" />
+		<link rel="stylesheet" type="text/css" href="css/header.css" />
+
+	</head>
+
+	<body>
+
+		<header class="mui-bar mui-bar-nav title">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left" style="color: white;"></a>
+			<a id="link_submit_search" class="mui-icon mui-icon-right-nav mui-pull-right" 
+				style="color: white;font-size: 14px;line-height: 25px;">search</a>
+			<h1 class="mui-title title-color">Add friend</h1>
+		</header>
+
+		<div class="mui-content">
+			<div class="mui-input-row">
+			    <input id="txt_your_friend_username" 
+			    	type="text" class="mui-input-speech mui-input-clear" 
+			    	placeholder="search friend">
+			</div>
+		</div>
+
+		<script src="js/mui.min.js"></script>
+		<script src="js/app.js"></script>
+		<script type="text/javascript">
+			mui.init()
+
+			mui.plusReady(function() {
+				var user = app.getUserGlobalInfo();
+				
+				var txt_your_friend_username = document.getElementById("txt_your_friend_username");
+				
+				var link_submit_search = document.getElementById("link_submit_search");
+				link_submit_search.addEventListener("tap", function() {
+					
+					var yourFriendUsername = txt_your_friend_username.value;
+					
+					plus.nativeUI.showWaiting("please wait...");
+					mui.ajax(app.serverUrl + "/u/search?myUserId=" + user.id +
+									"&friendUsername=" + yourFriendUsername, {
+						data:{},
+						dataType:'json',
+						type:'post',
+						timeout:10000,
+						headers:{'Content-Type':'application/json'},	              
+						success:function(data){
+							plus.nativeUI.closeWaiting();						
+							if (data.status == 200) {
+								mui.openWindow({
+									url: "searchFriendsResult.html",
+									id: "searchFriendsResult.html",
+									styles: {},
+									extras: {
+										willBeFriend: data.data
+									}
+								});
+							} else {
+								app.showToast(data.msg, "error");
+							}
+						}
+					});
+				});
+				
+			});
+			
+		</script>
+
+	</body>
+
+</html>

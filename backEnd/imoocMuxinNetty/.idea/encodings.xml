@@ -1,11 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="Encoding">
+    <file url="jar://$MAVEN_REPOSITORY$/com/github/tobato/fastdfs-client/1.26.2/fastdfs-client-1.26.2-sources.jar!/com/github/tobato/fastdfs/service/DefaultFastFileStorageClient.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main/java/com/imooc/Application.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/java/com/imooc/controller/UserController.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main/java/com/imooc/netty/ChatHandler.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/java/com/imooc/netty/UserChannelRel.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main/java/com/imooc/netty/WSServer.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main/java/com/imooc/netty/WSServerInitialzer.java" charset="ISO-8859-1" />
+    <file url="file://$PROJECT_DIR$/src/main/java/com/imooc/utils/FastDFSClient.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/java/com/imooc/utils/FileUtils.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/java/org" charset="ISO-8859-1" />
     <file url="PROJECT" charset="ISO-8859-1" />
   </component>
 </project>

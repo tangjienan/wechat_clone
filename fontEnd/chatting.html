@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title></title>
+		<link href="css/mui.min.css" rel="stylesheet" />
+		<link rel="stylesheet" type="text/css" href="css/header.css" />
+		<link rel="stylesheet" type="text/css" href="css/chat.css" />
+		<style>
+			html,
+			body {
+				height: 100%;
+				margin: 0px;
+				padding: 0px;
+				overflow: auto;
+				-webkit-touch-callout: none;
+				-webkit-user-select: none;
+			}
+		</style>
+	</head>
+
+	<body contextmenu="return false;">
+
+		<header class="mui-bar mui-bar-nav title" style="position: fixed;">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left title-color"></a>
+			<h1 class="mui-title title-color"><b id="chatting-nickname"> meChat</b></h1>
+		</header>
+
+		<div id="msg-outter" class="mui-content">
+			<div id='msg'>
+				
+				<!--<div class="friend_lists">
+					<div class="header_img">
+						<img src="image/face-default-cat.png" width="40px" height="40px" />
+					</div>
+					<div class="msg-wrapper right">
+						<p class="msg-left-white">晚上过来吃饭？</p>
+					</div>
+				</div>
+
+				<div class="me_lists">
+					<div class="header_img">
+						<img src="image/face-default-cat.png" width="40px" height="40px" />
+					</div>
+					<div class="msg-wrapper left">
+						<p class="msg-right-green">好的，没问题！时间地点？</p>
+					</div>
+				</div>-->
+
+			</div>
+		</div>
+		
+		<footer>
+			<div class="footer-center">
+				<textarea id='msg-text' type="text" class='input-text'></textarea>
+			</div>
+			<label for="" class="footer-right">
+				<button type="button" class="mui-btn mui-btn-gray" id="send">send</button>
+			</label>
+		</footer>
+		
+		<script src="js/mui.min.js"></script>
+		<script type="application/javascript" src="js/app.js"></script>
+		<script type="text/javascript">
+			// 创建命名空间，只需要把自己的代码，写进入，那么外部就无法访问
+//			(function($, doc){
+				
+				
+			
+				var friendUserId;
+				var friendNickname;
+				var friendFaceImage;
+				mui.plusReady(function(){
+					
+							
+					var me = app.getUserGlobalInfo();
+					
+					var chattingWebview = plus.webview.currentWebview();
+					chattingWebview.setStyle({
+						
+					});
+					
+					
+					friendUserId = chattingWebview.friendUserId;
+					friendNickname = chattingWebview.friendNickname;
+					friendFaceImage = chattingWebview.friendFaceImage;
+					
+					document.getElementById("chatting-nickname").innerHTML = friendNickname;
+					
+					initChatHistory();
+					
+					var areaMsgList = document.getElementById("msg");
+					areaMsgList.scrollTop = areaMsgList.scrollHeight + areaMsgList.offsetHeight;
+					
+					var msg_text = document.getElementById("msg-text");
+					var send = document.getElementById("send");
+					
+					// change button color
+					msg_text.addEventListener("input", function(){
+						var msg_text_val = msg_text.value;
+						if (msg_text_val.length > 0) {
+							send.setAttribute("class", "mui-btn-green");
+						} else {
+							send.setAttribute("class", "mui-btn-gray");
+						}
+					});
+					
+					
+					window.addEventListener("resize", function(){
+						resizeScreen();
+						document.getElementById("msg-outter").style.paddingBottom = "50px";
+					});
+					
+					// bind event
+					send.addEventListener("tap", function(){
+						
+						// check network status
+						var connectionStatus = plus.networkinfo.getCurrentType();
+						if (connectionStatus == 0 || connectionStatus == 1) {
+							app.showToast("no network connection...", "error");
+							return;
+						}
+						
+						// 
+						var msg_text_val = msg_text.value;
+						
+						if (msg_text_val.length === 0) {
+							return;
+						}
+						
+						sendMsg(app.imgServerUrl + me.faceImage, msg_text_val);
+						msg_text.value = "";
+						send.setAttribute("class", "mui-btn-gray");
+						
+						var chatMsg = new app.ChatMsg(me.id, friendUserId, msg_text_val, null);
+						var dataContent = new app.DataContent(app.CHAT, chatMsg, null);
+						
+						// send to beckend
+						var wsWebview = plus.webview.getWebviewById("imooc-chatlist.html");
+						wsWebview.evalJS("CHAT.chat('" + JSON.stringify(dataContent) + "')");
+//						wsWebview.evalJS("CHAT.chat('" + msg_text_val + "')");
+						
+						// save to cache
+						app.saveUserChatHistory(me.id, friendUserId, msg_text_val, 1);
+						app.saveUserChatSnapshot(me.id, friendUserId, msg_text_val, true);
+//						
+					});
+				});
+				
+				function receiveMsg(msg) {
+					
+					var msgHtml = '<div class="friend_lists">' +
+										'<div class="header_img">' +
+											'<img src="' + app.imgServerUrl + friendFaceImage + '" width="40px" height="40px" />' +
+										'</div>' +
+										'<div class="msg-wrapper right">' +
+											'<p class="msg-left-white">' + msg + '</p>' +
+										'</div>' +
+								  '</div>'; 
+					
+					var msg_list = document.getElementById("msg");
+					msg_list.insertAdjacentHTML("beforeend", msgHtml);
+					
+					playReceiveMsgSound();
+				}
+				
+				
+				function sendMsg(faceImg, msg) {
+					
+					var msgHtml = '<div class="me_lists">' +
+									'<div class="header_img">' +
+										'<img src="' + faceImg + '" width="40px" height="40px" />' +
+									'</div>' +
+									'<div class="msg-wrapper left">' +
+										'<p class="msg-right-green">' + msg + '</p>' +
+									'</div>' +
+								  '</div>';
+					var msg_list = document.getElementById("msg");
+					msg_list.insertAdjacentHTML("beforeend", msgHtml);
+					
+					playSendMsgSound();
+				}
+				
+				function playSendMsgSound() {
+					var audioPlayer = plus.audio.createPlayer("/mp3/send.mp3");
+					audioPlayer.play();
+				}
+				
+				function playReceiveMsgSound() {
+					var audioPlayer = plus.audio.createPlayer("/mp3/di_didi.mp3");
+					audioPlayer.play();
+				}
+				
+				function resizeScreen() {
+					var areaMsgList = document.getElementById("msg");
+					areaMsgList.scrollTop = areaMsgList.scrollHeight + areaMsgList.offsetHeight;
+				};
+				
+//			}(mui, document));
+			
+			// 初始化用户的聊天记录
+			function initChatHistory() {
+				var msg_list = document.getElementById("msg");
+				
+				var me = app.getUserGlobalInfo();
+				var myId = me.id;
+				var myFaceImg = me.faceImage;
+
+				var chatHistoryList = app.getUserChatHistory(myId, friendUserId);
+				
+				var togetherHTML = "";
+				
+				for (var i = 0 ; i < chatHistoryList.length ; i ++) {
+					var singleMsg = chatHistoryList[i];
+					if (singleMsg.flag == 1) {
+						togetherHTML += '<div class="me_lists">' +
+									'<div class="header_img">' +
+										'<img src="' + app.imgServerUrl + myFaceImg + '" width="40px" height="40px" />' +
+									'</div>' +
+									'<div class="msg-wrapper left">' +
+										'<p class="msg-right-green">' + singleMsg.msg + '</p>' +
+									'</div>' +
+								  '</div>';
+					} else {
+						togetherHTML += '<div class="friend_lists">' +
+										'<div class="header_img">' +
+											'<img src="' + app.imgServerUrl + friendFaceImage + '" width="40px" height="40px" />' +
+										'</div>' +
+										'<div class="msg-wrapper right">' +
+											'<p class="msg-left-white">' + singleMsg.msg + '</p>' +
+										'</div>' +
+								  '</div>';
+					}
+				}
+				msg_list.innerHTML = togetherHTML;
+			}
+			
+		</script>
+	</body>
+
+</html>
