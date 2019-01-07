@@ -16,7 +16,7 @@ Back-end is built using Java Spring Boot, Netty, MyBatis, [fastDFS](https://gith
 
 - Automatically save chat histroy to local devices.
 
-- Offline message resend. Messages that are delivered to users when they are offline will be saved in the database and will be redelivered to the users once they are online.
+- Offline message resend. Messages delivered to users when they are offline will be saved in the database and will be redelivered to the users once they are online.
 
 - Used heartbeat message to keep websockets open. Once a device is idle for a long time, the websocket will be closed to save memory.
 
