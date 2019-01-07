@@ -22,7 +22,7 @@ import java.util.List;
 public class ChatHandler extends SimpleChannelInboundHandler<TextWebSocketFrame> {
 
 
-    private static ChannelGroup users =
+    public static ChannelGroup users =
             new DefaultChannelGroup(GlobalEventExecutor.INSTANCE);
 
     @Override
@@ -105,7 +105,7 @@ public class ChatHandler extends SimpleChannelInboundHandler<TextWebSocketFrame>
 
 
         } else if (action == MsgActionEnum.KEEPALIVE.type) {
-            //  2.4 heartbeat
+            System.out.println("heartbeat signal from client");
         }
     }
 
